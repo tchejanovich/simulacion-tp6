@@ -10,6 +10,20 @@ const D = 1; // Metros cuadrados por persona
 const getNroAleatorioEnRango = (min, max) =>
   Math.round(Math.random() * (max - min) + min);
 
+const gaussianRand = () => {
+  var rand = 0;
+
+  for (var i = 0; i < 6; i += 1) {
+    rand += Math.random();
+  }
+
+  return rand / 6;
+};
+
+const gaussianRandom = (start, end) => {
+  return Math.floor(start + gaussianRand() * (end - start + 1));
+};
+
 // Funciones de probabilidad
 const IA_EXTREMO_IZQUIERDO = 9;
 const IA_EXTREMO_DERECHO = 12;
@@ -18,8 +32,10 @@ const getIA = () =>
 
 const TA_EXTREMO_IZQUIERDO = 10;
 const TA_EXTREMO_DERECHO = 50;
-const getTA = () =>
-  getNroAleatorioEnRango(TA_EXTREMO_IZQUIERDO, TA_EXTREMO_DERECHO); // En minutos
+// const getTA = () =>
+//   getNroAleatorioEnRango(TA_EXTREMO_IZQUIERDO, TA_EXTREMO_DERECHO); // En minutos
+const getTA = () => gaussianRandom(TA_EXTREMO_IZQUIERDO, TA_EXTREMO_DERECHO); // En minutos
+
 const getR = Math.random;
 
 // Auxiliares
@@ -96,6 +112,9 @@ const mostrarResultados = () => {
   console.log("STO", STO);
   console.log("SS", SS);
   console.log("SLL", SLL);
+  console.log("STA", STA);
+  console.log("NT", NT);
+
   console.log("-----------------------------------");
   console.log("PP", PP);
   console.log("PE", PE);
@@ -132,6 +151,7 @@ const iteracion = () => {
         const i = ocuparVendedorLibre(T + TA);
         console.log("P", P);
         STA = STA + TA;
+        console.log("STA", STA);
         P = P + 1;
         console.log("P", P);
         console.log("Fin de tiempo oscioso vendedor", i + 1);
@@ -168,6 +188,8 @@ const iteracion = () => {
     T = MinTPS;
     NS = NS - 1;
     console.log("NS", NS);
+    SS = SS + T;
+    console.log("SS", SS);
 
     if (T < TF) {
       ITO[i] = T;
@@ -178,10 +200,11 @@ const iteracion = () => {
         console.log("Tiempo de atencion", TA);
         i = getVendedorLibre();
         STO[i] = STO[i] + T - ITO[i];
+        console.log("Fin de tiempo oscioso vendedor", i + 1);
         TPS[i] = T + TA;
         console.log("TPS", TPS);
         STA = STA + TA;
-        console.log("STO", STO);
+        console.log("STA", STA);
       }
 
       // if (personasEnLaCola() + 1 <= 0) {
@@ -200,7 +223,6 @@ const iteracion = () => {
     } else {
       ITO[i] = null;
     }
-    SS = SS + T;
   }
 
   const loggear = () => {
