@@ -3,8 +3,8 @@ const HV = 99999999999;
 const TF = 1000;
 
 // Variables de control
-const N = 3; // Puestos de atencion
-const M = 6; // Metros cuadrados del local
+const N = 10; // Puestos de atencion
+const M = 500; // Metros cuadrados del local
 const D = 1; // Metros cuadrados por persona
 
 const getNroAleatorioEnRango = (min, max) =>
@@ -30,8 +30,8 @@ const IA_EXTREMO_DERECHO = 12;
 const getIA = () =>
   getNroAleatorioEnRango(IA_EXTREMO_IZQUIERDO, IA_EXTREMO_DERECHO); // En minutos
 
-const TA_EXTREMO_IZQUIERDO = 10;
-const TA_EXTREMO_DERECHO = 50;
+const TA_EXTREMO_IZQUIERDO = 15;
+const TA_EXTREMO_DERECHO = 35;
 // const getTA = () =>
 //   getNroAleatorioEnRango(TA_EXTREMO_IZQUIERDO, TA_EXTREMO_DERECHO); // En minutos
 const getTA = () => gaussianRandom(TA_EXTREMO_IZQUIERDO, TA_EXTREMO_DERECHO); // En minutos
@@ -96,6 +96,15 @@ const mostrarConPorcentaje = (valorDecimal) =>
   `${valorDecimal.toString().substring(0, 5)}%`;
 
 const mostrarResultados = () => {
+  let deltaRestar = 0;
+  const minTime = Math.min.apply(Math, TPS);
+  TPS.forEach((valor) => {
+    if (valor !== HV) {
+      deltaRestar = deltaRestar + (valor - minTime);
+    }
+  });
+  STA = STA - deltaRestar;
+
   // Calculo de resultados
   ITO.forEach((valor, i) => {
     if (valor !== null) {
@@ -106,13 +115,14 @@ const mostrarResultados = () => {
   const PP = (SS - SLL) / NT; // Promedio de permanencia
   const PE = (SS - SLL - STA) / NT; // Promedio de espera
   const PTO = STO.map((valor) => mostrarConPorcentaje((valor * 100) / T)); // Sumatoria de tiempo oscioso
-  const PA = (ARR * 100) / NT; // Sumatoria de tiempo oscioso
+  const PA = (ARR * 100) / (ARR + NT); // Sumatoria de tiempo oscioso
 
   console.log("T", T);
   console.log("STO", STO);
   console.log("SS", SS);
   console.log("SLL", SLL);
   console.log("STA", STA);
+  console.log("Delta", SS - SLL - STA);
   console.log("NT", NT);
 
   console.log("-----------------------------------");
@@ -134,16 +144,16 @@ const iteracion = () => {
     console.log("Intervalo entre arribos", IA);
 
     T = TPLL;
-    TPLL = T + IA;
-
-    NT = NT + 1;
-    console.log("NT", NT);
+    TPLL = T + IA < TF ? T + IA : HV;
 
     const nuevoElementoEnSistema = () => {
+      NT = NT + 1;
+      console.log("NT", NT);
       console.log("nuevoElementoEnSistema!");
       NS = NS + 1;
       console.log("NS", NS);
       SLL = SLL + T;
+      console.log("SLL", SLL);
 
       if (NS <= N && N + NS <= MAX_PERSONAS) {
         const TA = getTA();
@@ -189,12 +199,14 @@ const iteracion = () => {
     NS = NS - 1;
     console.log("NS", NS);
     SS = SS + T;
+
     console.log("SS", SS);
 
     if (T < TF) {
       ITO[i] = T;
       TPS[i] = HV;
-
+      console.log("TPS", TPS);
+      console.log("personasEnLaCola", personasEnLaCola() + 1);
       if (personasEnLaCola() + 1 > 0) {
         const TA = getTA();
         console.log("Tiempo de atencion", TA);
@@ -206,20 +218,6 @@ const iteracion = () => {
         STA = STA + TA;
         console.log("STA", STA);
       }
-
-      // if (personasEnLaCola() + 1 <= 0) {
-      //   console.log("Inicio de tiempo oscioso vendedor", i + 1);
-      //   ITO[i] = T;
-      //   TPS[i] = HV;
-      //   console.log("TPS", TPS);
-      // } else {
-      //   const TA = getTA();
-      //   console.log("Tiempo de atencion", TA);
-      //   TPS[i] = T + TA;
-      //   console.log("TPS", TPS);
-      //   STA = STA + TA;
-      //   console.log("STO", STO);
-      // }
     } else {
       ITO[i] = null;
     }
