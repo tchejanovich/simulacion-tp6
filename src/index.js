@@ -4,7 +4,7 @@ const TF = 1000;
 
 // Variables de control
 const N = 3; // Puestos de atencion
-const M = 5; // Metros cuadrados del local
+const M = 6; // Metros cuadrados del local
 const D = 1; // Metros cuadrados por persona
 
 const getNroAleatorioEnRango = (min, max) =>
@@ -52,9 +52,25 @@ const getMinTPs = () =>
     [HV, -1]
   );
 
-const getPuestoLibre = () => TPS.findIndex((tps) => tps === HV);
-const ocuparPuestoLibre = (tSalida) => {
-  const iPuestoLibre = getPuestoLibre();
+const getRandomDeArray = (array) =>
+  array[Math.floor(Math.random() * array.length)];
+
+const getVendedoresLibres = () =>
+  TPS.map((valor, index) => (valor === HV ? index : null)).filter(
+    (tps) => tps !== null
+  );
+
+const getVendedorLibre = () => {
+  const vendedoresLibres = TPS.map((valor, index) =>
+    valor === HV ? index : null
+  ).filter((tps) => tps !== null);
+  const vendedorLibre = getRandomDeArray(vendedoresLibres);
+  console.log("vendedorLibre", vendedorLibre);
+  return vendedorLibre;
+};
+
+const ocuparVendedorLibre = (tSalida) => {
+  const iPuestoLibre = getVendedorLibre();
   TPS[iPuestoLibre] = tSalida;
   console.log("TPS", TPS);
   return iPuestoLibre;
@@ -89,7 +105,7 @@ const mostrarResultados = () => {
 
 const personasEnLaCola = () => NS - Math.min(N, MAX_CLIENTES_ADENTRO);
 const iteracion = () => {
-  const [MinTPS, i] = getMinTPs();
+  let [MinTPS, i] = getMinTPs();
 
   if (TPLL < MinTPS) {
     console.log("Tiempo", TPLL);
@@ -113,7 +129,7 @@ const iteracion = () => {
       if (NS <= N && N + NS <= MAX_PERSONAS) {
         const TA = getTA();
         console.log("Tiempo de atencion", TA);
-        const i = ocuparPuestoLibre(T + TA);
+        const i = ocuparVendedorLibre(T + TA);
         console.log("P", P);
         STA = STA + TA;
         P = P + 1;
@@ -154,20 +170,33 @@ const iteracion = () => {
     console.log("NS", NS);
 
     if (T < TF) {
-      // if (NS < N) {
-      if (personasEnLaCola() + 1 <= 0) {
-        console.log("Inicio de tiempo oscioso vendedor", i + 1);
-        ITO[i] = T;
-        TPS[i] = HV;
-        console.log("TPS", TPS);
-      } else {
+      ITO[i] = T;
+      TPS[i] = HV;
+
+      if (personasEnLaCola() + 1 > 0) {
         const TA = getTA();
         console.log("Tiempo de atencion", TA);
+        i = getVendedorLibre();
+        STO[i] = STO[i] + T - ITO[i];
         TPS[i] = T + TA;
         console.log("TPS", TPS);
         STA = STA + TA;
         console.log("STO", STO);
       }
+
+      // if (personasEnLaCola() + 1 <= 0) {
+      //   console.log("Inicio de tiempo oscioso vendedor", i + 1);
+      //   ITO[i] = T;
+      //   TPS[i] = HV;
+      //   console.log("TPS", TPS);
+      // } else {
+      //   const TA = getTA();
+      //   console.log("Tiempo de atencion", TA);
+      //   TPS[i] = T + TA;
+      //   console.log("TPS", TPS);
+      //   STA = STA + TA;
+      //   console.log("STO", STO);
+      // }
     } else {
       ITO[i] = null;
     }
