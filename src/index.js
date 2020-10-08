@@ -151,6 +151,7 @@ const iteracion = () => {
       NS = NS + 1;
       console.log("NS", NS);
       SLL = SLL + T;
+      console.log("SS", SS);
       console.log("SLL", SLL);
 
       if (NS <= N && N + NS <= MAX_PERSONAS) {
@@ -174,12 +175,12 @@ const iteracion = () => {
       }
     };
 
-    if (NS <= N + 3) {
+    if (personasEnLaCola() <= 3) {
       nuevoElementoEnSistema();
     } else {
       const R = getR();
       console.log("R aleatorio", R);
-      if (NS < N + 6 && R > 0.4) {
+      if (personasEnLaCola() < 6 && R > 0.4) {
         nuevoElementoEnSistema();
       } else {
         console.log("Arrepentimiento!");
@@ -199,6 +200,7 @@ const iteracion = () => {
     SS = SS + T;
 
     console.log("SS", SS);
+    console.log("SLL", SLL);
 
     if (T < TF) {
       ITO[i] = T;

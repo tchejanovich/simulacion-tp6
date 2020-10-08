@@ -1,7 +1,7 @@
 export const TF = 2000;
 
 // Variables de control
-export const N = 2; // Puestos de atencion
+export const N = 5; // Puestos de atencion
 export const M = 50; // Metros cuadrados del local
 export const D = 5; // Metros cuadrados por persona
 
