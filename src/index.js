@@ -1,10 +1,10 @@
 // Constantes
 const HV = 99999999999;
-const TF = 2000;
+const TF = 1000;
 
 // Variables de control
 const N = 3; // Puestos de atencion
-const M = 5000; // Metros cuadrados del local
+const M = 5; // Metros cuadrados del local
 const D = 1; // Metros cuadrados por persona
 
 const getNroAleatorioEnRango = (min, max) =>
@@ -40,7 +40,7 @@ let SS = 0;
 let STA = 0;
 let ARR = 0;
 let P = 0;
-let ITO = arrayNElementos(null);
+let ITO = arrayNElementos(0);
 let STO = arrayNElementos(0);
 
 const getMinTPs = () =>
@@ -66,8 +66,8 @@ const mostrarConPorcentaje = (valorDecimal) =>
 const mostrarResultados = () => {
   // Calculo de resultados
   ITO.forEach((valor, i) => {
-    if (valor === null) {
-      // STO[i] = STO[i] + T - ITO[i];
+    if (valor !== null) {
+      STO[i] = STO[i] + T - ITO[i];
     }
   });
 
@@ -87,6 +87,7 @@ const mostrarResultados = () => {
   console.log("PA", mostrarConPorcentaje(PA));
 };
 
+const personasEnLaCola = () => NS - Math.min(N, MAX_CLIENTES_ADENTRO);
 const iteracion = () => {
   const [MinTPS, i] = getMinTPs();
 
@@ -99,7 +100,7 @@ const iteracion = () => {
 
     T = TPLL;
     TPLL = T + IA;
-    console.log("TPLL", TPLL);
+
     NT = NT + 1;
     console.log("NT", NT);
 
@@ -119,11 +120,13 @@ const iteracion = () => {
         console.log("P", P);
         console.log("Fin de tiempo oscioso vendedor", i + 1);
         console.log("Sumatoria de  oscioso vendedor " + (i + 1), T - ITO[i]);
+
         STO[i] = STO[i] + T - ITO[i];
+        ITO[i] = null;
         console.log("STO", STO);
       } else {
         console.log("A la cola!");
-        // console.log("Total en cola:", NS - MAX_CLIENTES_ADENTRO      );
+        console.log("Total en cola:", personasEnLaCola());
       }
     };
 
@@ -151,10 +154,10 @@ const iteracion = () => {
     console.log("NS", NS);
 
     if (T < TF) {
-      if (NS < N) {
+      // if (NS < N) {
+      if (personasEnLaCola() + 1 <= 0) {
         console.log("Inicio de tiempo oscioso vendedor", i + 1);
         ITO[i] = T;
-
         TPS[i] = HV;
         console.log("TPS", TPS);
       } else {
@@ -165,6 +168,8 @@ const iteracion = () => {
         STA = STA + TA;
         console.log("STO", STO);
       }
+    } else {
+      ITO[i] = null;
     }
     SS = SS + T;
   }
