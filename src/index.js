@@ -1,11 +1,15 @@
-// Constantes
-const HV = 99999999999;
-const TF = 1000;
+import {
+  TF,
+  N,
+  M,
+  D,
+  IA_EXTREMO_IZQUIERDO,
+  IA_EXTREMO_DERECHO,
+  TA_EXTREMO_IZQUIERDO,
+  TA_EXTREMO_DERECHO,
+} from "./constantesYControl";
 
-// Variables de control
-const N = 10; // Puestos de atencion
-const M = 500; // Metros cuadrados del local
-const D = 1; // Metros cuadrados por persona
+const HV = 99999999999;
 
 const getNroAleatorioEnRango = (min, max) =>
   Math.round(Math.random() * (max - min) + min);
@@ -25,15 +29,9 @@ const gaussianRandom = (start, end) => {
 };
 
 // Funciones de probabilidad
-const IA_EXTREMO_IZQUIERDO = 9;
-const IA_EXTREMO_DERECHO = 12;
 const getIA = () =>
   getNroAleatorioEnRango(IA_EXTREMO_IZQUIERDO, IA_EXTREMO_DERECHO); // En minutos
 
-const TA_EXTREMO_IZQUIERDO = 15;
-const TA_EXTREMO_DERECHO = 35;
-// const getTA = () =>
-//   getNroAleatorioEnRango(TA_EXTREMO_IZQUIERDO, TA_EXTREMO_DERECHO); // En minutos
 const getTA = () => gaussianRandom(TA_EXTREMO_IZQUIERDO, TA_EXTREMO_DERECHO); // En minutos
 
 const getR = Math.random;
@@ -126,10 +124,10 @@ const mostrarResultados = () => {
   console.log("NT", NT);
 
   console.log("-----------------------------------");
-  console.log("PP", PP);
-  console.log("PE", PE);
-  console.log("PTO", PTO);
-  console.log("PA", mostrarConPorcentaje(PA));
+  console.log("Promedio de permanencia", PP);
+  console.log("Promedio de espera", PE);
+  console.log("Porcentaje de tiempo ocioso por empleado", PTO);
+  console.log("Porcentaje de arrepentimiento", mostrarConPorcentaje(PA));
 };
 
 const personasEnLaCola = () => NS - Math.min(N, MAX_CLIENTES_ADENTRO);
