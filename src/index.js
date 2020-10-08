@@ -7,14 +7,91 @@ const N = 3; // Puestos de atencion
 const M = 40000; // Metros cuadrados del local
 const D = 1; // Metros cuadrados por persona
 
+const getNroAleatorioEnRango = (min, max) =>
+  Math.round(Math.random() * (max - min) + min);
+
 // Funciones de probabilidad
-const getIA = () => 10; // En minutos
-const getTA = () => 50; // En minutos
-const getR = () => 0.5;
+const IA_EXTREMO_IZQUIERDO = 9;
+const IA_EXTREMO_DERECHO = 12;
+const getIA = () =>
+  getNroAleatorioEnRango(IA_EXTREMO_IZQUIERDO, IA_EXTREMO_DERECHO); // En minutos
+
+const TA_EXTREMO_IZQUIERDO = 10;
+const TA_EXTREMO_DERECHO = 50;
+const getTA = () =>
+  getNroAleatorioEnRango(TA_EXTREMO_IZQUIERDO, TA_EXTREMO_DERECHO); // En minutos
+const getR = Math.random;
+
+// console.log("IA", getIA());
+// console.log("IA", getIA());
+// console.log("IA", getIA());
+// console.log("IA", getIA());
+// console.log("IA", getIA());
+// console.log("IA", getIA());
+// console.log("IA", getIA());
+// console.log("IA", getIA());
+// console.log("IA", getIA());
+// console.log("IA", getIA());
+// console.log("IA", getIA());
+// console.log("IA", getIA());
+// console.log("IA", getIA());
+// console.log("IA", getIA());
+// console.log("IA", getIA());
+// console.log("IA", getIA());
+// console.log("IA", getIA());
+// console.log("IA", getIA());
+// console.log("IA", getIA());
+// console.log("IA", getIA());
+// console.log("IA", getIA());
+// console.log("IA", getIA());
+// console.log("TA", getTA());
+// console.log("TA", getTA());
+// console.log("TA", getTA());
+// console.log("TA", getTA());
+// console.log("TA", getTA());
+// console.log("TA", getTA());
+// console.log("TA", getTA());
+// console.log("TA", getTA());
+// console.log("TA", getTA());
+// console.log("TA", getTA());
+// console.log("TA", getTA());
+// console.log("TA", getTA());
+// console.log("TA", getTA());
+// console.log("TA", getTA());
+// console.log("TA", getTA());
+// console.log("TA", getTA());
+// console.log("TA", getTA());
+// console.log("TA", getTA());
+// console.log("TA", getTA());
+// console.log("TA", getTA());
+// console.log("TA", getTA());
+// console.log("TA", getTA());
+// console.log("TA", getTA());
+// console.log("TA", getTA());
+// console.log("TA", getTA());
+// console.log("TA", getTA());
+// console.log("TA", getTA());
+// console.log("TA", getTA());
+// console.log("TA", getTA());
+// console.log("TA", getTA());
+// console.log("TA", getTA());
+// console.log("TA", getTA());
+
+// e^((-1/2)((ln x-199)/163)^2))/(x*163(6)^(1/2)
+// const e = Math.E;
+// const ln = Math.log;
+// const f1 = (x) =>
+//   (e ^ ((-1 / 2)((ln(x) - 199) / 163) ^ 2)) / (x * 163 * (6 ^ (1 / 2)));
+
+// f1(10);
+// f1(20);
+// f1(30);
+// f1(40);
 
 // Auxiliares
 const arrayNElementos = (valor) => [...Array(N).keys()].map(() => valor);
 const MAX_PERSONAS = Math.floor(M / D); // Cantidad maxima de personas
+console.log("MAX_PERSONAS", MAX_PERSONAS);
 
 // Variables
 let T = 0;
@@ -77,7 +154,8 @@ const iteracion = () => {
         STA = STA + TA;
         P = P + 1;
         console.log("P", P);
-        console.log("Fin de tiempo oscioso vendedor", i);
+        console.log("Fin de tiempo oscioso vendedor", i + 1);
+        console.log("Sumatoria de  oscioso vendedor " + (i + 1), T - ITO[i]);
         STO[i] = STO[i] + T - ITO[i];
         console.log("STO", STO);
       } else {
@@ -89,6 +167,7 @@ const iteracion = () => {
       nuevoElementoEnSistema();
     } else {
       const R = getR();
+      console.log("R", R);
       if (NS < N + 6 && R > 0.4) {
         nuevoElementoEnSistema();
       } else {
@@ -107,8 +186,8 @@ const iteracion = () => {
     NS = NS - 1;
     console.log("NS", NS);
 
-    if (NS < MAX_PERSONAS - N) {
-      console.log("Inicio de tiempo oscioso vendedor", i);
+    if (NS < N) {
+      console.log("Inicio de tiempo oscioso vendedor", i + 1);
       ITO[i] = T;
       TPS[i] = HV;
       console.log("TPS", TPS);
@@ -118,7 +197,6 @@ const iteracion = () => {
       TPS[i] = T + TA;
       console.log("TPS", TPS);
       STA = STA + TA;
-      STO[i] = STO[i] + T - ITO[i];
       console.log("STO", STO);
     }
     SS = SS + T;
